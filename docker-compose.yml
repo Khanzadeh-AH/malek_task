@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  webserver:
+    image: nginx:1.24.0-bullseye
+    volumes:
+      - ./templates:/etc/nginx/templates
+    ports:
+      - "80:80"
+    environment:
+      - NGINX_PORT=80
+
+  webapp:
+    build: .
+    environment:
+      - WEBAPP_PORT=8080
+
+  db:
+    image: postgres:15.3-alpine3.18
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+
+
+volumes:
+  dbdata:
